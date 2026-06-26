@@ -46,9 +46,11 @@ class CategoryManager extends Component
             'name' => 'required|string|max:255',
         ]);
 
-        Category::updateOrCreate(['id' => $this->categoryId], [
-            'name' => $this->name
-        ]);
+        if ($this->categoryId) {
+            Category::where('id', $this->categoryId)->update(['name' => $this->name]);
+        } else {
+            Category::create(['name' => $this->name]);
+        }
 
         session()->flash('message', $this->categoryId ? 'Kategori berhasil diperbarui.' : 'Kategori berhasil ditambahkan.');
 

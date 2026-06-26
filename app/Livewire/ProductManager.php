@@ -101,7 +101,12 @@ class ProductManager extends Component
             }
         }
 
-        Product::updateOrCreate(['id' => $this->productId], $data);
+        if ($this->productId) {
+            Product::where('id', $this->productId)->update($data);
+        } else {
+            $product = Product::create($data);
+            $this->productId = $product->id;
+        }
 
         session()->flash('message', $this->productId ? 'Produk diperbarui.' : 'Produk ditambahkan.');
 

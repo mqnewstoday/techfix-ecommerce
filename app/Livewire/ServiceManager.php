@@ -60,12 +60,18 @@ class ServiceManager extends Component
             'price' => 'required|numeric|min:0',
         ]);
 
-        Service::updateOrCreate(['id' => $this->serviceId], [
+        $data = [
             'code' => $this->code,
             'name' => $this->name,
             'category_id' => $this->category_id,
             'price' => $this->price,
-        ]);
+        ];
+
+        if ($this->serviceId) {
+            Service::where('id', $this->serviceId)->update($data);
+        } else {
+            Service::create($data);
+        }
 
         session()->flash('message', $this->serviceId ? 'Jasa diperbarui.' : 'Jasa ditambahkan.');
 
